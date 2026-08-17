@@ -14,3 +14,5 @@ cmake_install.cmake
 CTestTestfile.cmake
 Makefile
 Testing/
+tools/target/
+tools/Cargo.lock
