@@ -22,6 +22,7 @@ Renderer::Renderer(Window& window) {
     if (!renderer_) {
         throw std::runtime_error(std::string("SDL_CreateRenderer failed: ") + SDL_GetError());
     }
+    SDL_GetRendererOutputSize(renderer_, &width_, &height_);
 }
 
 Renderer::~Renderer() {
@@ -68,5 +69,26 @@ void Renderer::draw_line(float x1, float y1, float x2, float y2, const Color& co
     SDL_RenderDrawLine(renderer_, static_cast<int>(x1), static_cast<int>(y1),
                        static_cast<int>(x2), static_cast<int>(y2));
 }
+
+bool Renderer::save_screenshot(const std::string& path) {
+    int w = 0, h = 0;
+    SDL_GetRendererOutputSize(renderer_, &w, &h);
+    SDL_Surface* surface = SDL_CreateRGBSurface(0, w, h, 32, 0x00FF0000, 0x0000FF00,
+                                                0x000000FF, 0xFF000000);
+    if (!surface) {
+        return false;
+    }
+    if (SDL_RenderReadPixels(renderer_, nullptr, surface->format->format,
+                             surface->pixels, surface->pitch) != 0) {
+        SDL_FreeSurface(surface);
+        return false;
+    }
+    bool ok = SDL_SaveBMP(surface, path.c_str()) == 0;
+    SDL_FreeSurface(surface);
+    return ok;
+}
+
+int Renderer::width() const { return width_; }
+int Renderer::height() const { return height_; }
 
 }  // namespace forge

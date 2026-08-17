@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include "forge/math/rect.h"
 
 struct SDL_Renderer;
@@ -23,8 +25,16 @@ public:
     void draw_rect_outline(const Rect& rect, const Color& color, float thickness = 1.0f);
     void draw_line(float x1, float y1, float x2, float y2, const Color& color);
 
+    // Capture the current framebuffer to a BMP file.
+    bool save_screenshot(const std::string& path);
+
+    int width() const;
+    int height() const;
+
 private:
     SDL_Renderer* renderer_ = nullptr;
+    int width_ = 0;
+    int height_ = 0;
 };
 
 }  // namespace forge

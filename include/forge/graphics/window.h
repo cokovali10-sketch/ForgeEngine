@@ -24,6 +24,7 @@ public:
     int height() const;
     bool should_close() const;
     void poll_events();
+    void set_title(const std::string& title);
 
     SDL_Window* native() const { return window_; }
     void* native_handle() const;

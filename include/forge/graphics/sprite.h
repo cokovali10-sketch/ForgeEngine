@@ -8,6 +8,7 @@ namespace forge {
 struct Sprite {
     Rect rect;            // world-space rect
     Color color = Color::white();
+    bool solid = false;   // participates in AABB collisions
     bool flip_x = false;
     bool flip_y = false;
 };

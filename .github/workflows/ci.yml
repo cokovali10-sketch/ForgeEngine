@@ -1,0 +1,63 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  BUILD_TYPE: Release
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake ninja-build libsdl2-dev
+
+      - name: Configure CMake
+        run: cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
+
+      - name: Build
+        run: cmake --build build --config ${{ env.BUILD_TYPE }}
+
+      - name: Run tests
+        run: ctest --test-dir build --output-on-failure
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: forge-engine-${{ runner.os }}
+          path: build/bin/*
+          retention-days: 7
+
+  rust-toolchain:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Build Rust asset tools
+        run: |
+          cd tools
+          cargo build --release
+
+      - name: Generate palette
+        run: |
+          cd tools
+          cargo run --release -- ../include/forge/assets/generated_palette.h
+
+      - name: Verify generated header
+        run: |
+          test -f include/forge/assets/generated_palette.h
+          grep -q "constexpr Color" include/forge/assets/generated_palette.h
+          echo "Generated palette header verified"

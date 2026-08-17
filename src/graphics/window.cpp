@@ -48,6 +48,10 @@ void Window::poll_events() {
     }
 }
 
+void Window::set_title(const std::string& title) {
+    SDL_SetWindowTitle(window_, title.c_str());
+}
+
 void* Window::native_handle() const { return window_; }
 
 }  // namespace forge
