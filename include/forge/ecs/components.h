@@ -1,0 +1,23 @@
+#pragma once
+
+#include "forge/math/rect.h"
+#include "forge/math/vec2.h"
+
+namespace forge {
+
+struct Transform {
+    Vec2 position;
+    Vec2 scale{1.0f, 1.0f};
+    float rotation = 0.0f;
+};
+
+struct Velocity {
+    Vec2 value;
+};
+
+struct RigidBody {
+    Vec2 velocity;
+    bool gravity = false;
+};
+
+}  // namespace forge

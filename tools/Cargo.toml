@@ -1,0 +1,11 @@
+[package]
+name = "forge-asset-tools"
+version = "0.1.0"
+edition = "2021"
+description = "ForgeEngine asset tooling: color palette generator bridging Rust and C++"
+
+[[bin]]
+name = "forge-asset-tools"
+path = "src/main.rs"
+
+[dependencies]
