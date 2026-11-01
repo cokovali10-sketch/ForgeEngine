@@ -15,9 +15,20 @@
 </div>
 
 <div align="center">
-  <img src="assets/screenshot.png" alt="ForgeEngine Demo Screenshot" width="800"/>
-  <br/>
-  <i>Demo platformer: physics, collision, sprite rendering, starfield background</i>
+
+```mermaid
+flowchart LR
+    R[Renderer<br/>SDL2 HW-accel] --> W[Window]
+    E[ECS World<br/>sparse sets] --> S[Systems<br/>movement, collision, render]
+    S --> R
+    I[Input<br/>edge detection] --> S
+    P[Physics<br/>AABB sweep] --> S
+    A[Rust Asset Tool] -->|generates| G[generated_palette.h<br/>constexpr]
+    G --> R
+```
+
+<i>Demo platformer: ECS · AABB sweep physics · SDL2 rendering · Rust asset bridge</i>
+
 </div>
 
 **ForgeEngine** is a compact, cleanly-architected 2D game engine written in modern C++20. It demonstrates a real **ECS (Entity-Component-System)** core, hardware-accelerated SDL2 rendering, AABB physics with sweep collision, input handling, and a cross-language **C++ ↔ Rust toolchain** that generates C++ asset code from Rust. Built to be readable, testable, and a strong portfolio piece.
